@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcryptjs';
 import { db } from '../db.js';
 import { authenticateToken, authorizeRole } from '../middleware/authMiddleware.js';
 
@@ -39,7 +40,7 @@ router.post('/students', authenticateToken, authorizeRole('admin'), async (req, 
         if (userCheck.rows.length > 0) return res.status(400).json({ message: "User already exists" });
 
         // We need to hash password
-        const hashedPassword = await import('bcryptjs').then(bcrypt => bcrypt.hash(password, 10));
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const userResult = await db.execute({
             sql: "INSERT INTO users (name, email, password, role, batch_id) VALUES (?, ?, ?, 'student', ?) RETURNING id",
@@ -246,7 +247,7 @@ router.put('/students/:id', authenticateToken, authorizeRole('admin'), async (re
 
         // Handle password update if provided and not the placeholder
         if (password && password !== '*****') {
-            const hashedPassword = await import('bcryptjs').then(bcrypt => bcrypt.hash(password, 10));
+            const hashedPassword = await bcrypt.hash(password, 10);
             await db.execute({
                 sql: "UPDATE users SET name = ?, email = ?, password = ?, batch_id = ? WHERE id = ?",
                 args: [nameToUpdate, emailToUpdate, hashedPassword, batch_id || null, userId]

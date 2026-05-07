@@ -7,6 +7,7 @@ import ProjectApprovals from '../components/admin/ProjectApprovals';
 import ContentManagement from '../components/admin/ContentManagement';
 import AdminAssessments from '../components/admin/AdminAssessments';
 import CertificateApprovals from '../components/admin/CertificateApprovals';
+import AdminStudents from '../components/admin/AdminStudents';
 
 
 const AdminDashboard = () => {
@@ -16,6 +17,7 @@ const AdminDashboard = () => {
 
     const tabs = [
         { id: 'overview', label: 'Overview', icon: <Users size={18} /> },
+        { id: 'students', label: 'Students', icon: <Users size={18} /> },
         { id: 'content', label: 'Content Management', icon: <BookOpen size={18} /> },
         { id: 'assessments', label: 'Assessments', icon: <BookOpen size={18} /> },
         { id: 'projects', label: 'Projects', icon: <BookOpen size={18} /> },
@@ -25,6 +27,7 @@ const AdminDashboard = () => {
 
     const renderContent = () => {
         switch (activeTab) {
+            case 'students': return <AdminStudents />;
             case 'content': return <ContentManagement />;
             case 'assessments': return <AdminAssessments />;
             case 'projects': return <ProjectApprovals />;

