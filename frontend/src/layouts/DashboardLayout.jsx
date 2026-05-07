@@ -27,7 +27,7 @@ const DashboardLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL || 'http://localhost:5002';
+    const UPLOADS_URL = import.meta.env.PROD ? '/uploads/' : 'http://localhost:5002/uploads/';
 
     const handleLogout = () => {
         if (window.confirm('Are you sure you want to logout?')) {

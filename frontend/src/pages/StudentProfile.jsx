@@ -19,7 +19,7 @@ const StudentProfile = () => {
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
     const [uploadingResume, setUploadingResume] = useState(false);
 
-    const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL || 'http://localhost:5002';
+    const UPLOADS_URL = import.meta.env.PROD ? '/uploads/' : 'http://localhost:5002/uploads/';
 
     useEffect(() => {
         fetchProfile();
