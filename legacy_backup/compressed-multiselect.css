@@ -1,0 +1,29 @@
+/* ========== COMPRESSED COURSE MULTI-SELECT ========== */
+
+/* Compress the course multi-select to be more compact */
+.course-multiselect {
+    min-height: 100px !important;
+    max-height: 100px !important;
+    height: 100px !important;
+    padding: 0.5rem;
+    overflow-y: auto;
+    border: 2px solid #dee2e6;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.course-multiselect option {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.course-multiselect option:checked {
+    background-color: #9b59b6 !important;
+    color: white !important;
+}
+
+.course-multiselect option:hover {
+    background-color: rgba(155, 89, 182, 0.1);
+}

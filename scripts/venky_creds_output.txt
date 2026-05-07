@@ -1,0 +1,10 @@
+Checking Venky...
+[
+  {
+    "id": 6,
+    "name": "Venky",
+    "email": "venky@gmail.com",
+    "password": "$2b$10$o6f45Fs.rKyVsxyfMoW9tepKV7ktwA1LZBvkpEPrhadMOE8acOR8W",
+    "role": "student"
+  }
+]

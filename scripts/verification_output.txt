@@ -1,0 +1,10 @@
+--- ENROLLMENTS SCHEMA AFTER FIX ---
+CREATE TABLE enrollments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                student_id INTEGER NOT NULL,
+                course_id INTEGER NOT NULL,
+                enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+                UNIQUE(student_id, course_id)
+            )

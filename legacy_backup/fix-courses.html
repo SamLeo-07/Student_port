@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Fix - Add Courses</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .step {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .success {
+            background: #4caf50;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .success.show {
+            display: block;
+        }
+
+        .link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 Quick Fix: Add Default Courses</h1>
+        <p class="subtitle">Click the button below to add 6 default courses to your portal</p>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Click the button below</strong> to add courses to localStorage
+        </div>
+
+        <button onclick="addCourses()">✨ Add 6 Default Courses Now</button>
+
+        <div class="success" id="success">
+            <strong>✅ Success!</strong> Courses added successfully!<br><br>
+            <div class="step">
+                <span class="step-number">2</span>
+                Now go to <a href="http://localhost:8000/admin-dashboard.html" class="link">Admin Dashboard</a>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                Click on <strong>"Add Videos"</strong> in the sidebar
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                The course dropdown should now show all 6 courses!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addCourses() {
+            // Get existing portal data or create new
+            let portalData = JSON.parse(localStorage.getItem('portalData') || '{}');
+
+            // Initialize structure if needed
+            if (!portalData.announcements) portalData.announcements = [];
+            if (!portalData.videos) portalData.videos = [];
+            if (!portalData.certificates) portalData.certificates = [];
+            if (!portalData.interviewQuestions) portalData.interviewQuestions = [];
+            if (!portalData.students) portalData.students = [];
+
+            // Add default courses
+            portalData.courses = [
+                {
+                    id: Date.now() + 1,
+                    name: 'Full Stack Development',
+                    category: 'Web Development',
+                    description: 'Master modern web development with React, Node.js, and databases. Build complete web applications from scratch.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 2,
+                    name: 'Data Science & Machine Learning',
+                    category: 'Data Science',
+                    description: 'Learn Python, data analysis, machine learning algorithms, and AI fundamentals for real-world applications.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 3,
+                    name: 'Cloud Computing (AWS/Azure)',
+                    category: 'Cloud & DevOps',
+                    description: 'Master cloud platforms, deployment strategies, and scalable infrastructure management.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 4,
+                    name: 'DevOps & CI/CD',
+                    category: 'Cloud & DevOps',
+                    description: 'Learn automation, continuous integration, deployment pipelines, and modern DevOps practices.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 5,
+                    name: 'Mobile App Development',
+                    category: 'Mobile Development',
+                    description: 'Build native and cross-platform mobile applications using React Native and Flutter.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 6,
+                    name: 'Cybersecurity Fundamentals',
+                    category: 'Security',
+                    description: 'Understand security principles, ethical hacking, network security, and threat prevention.',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+
+            // Update statistics
+            if (!portalData.statistics) portalData.statistics = {};
+            portalData.statistics.totalCourses = 6;
+            portalData.statistics.totalStudents = portalData.statistics.totalStudents || 0;
+            portalData.statistics.totalVideos = portalData.statistics.totalVideos || 0;
+            portalData.statistics.totalCertificates = portalData.statistics.totalCertificates || 0;
+
+            // Save to localStorage
+            localStorage.setItem('portalData', JSON.stringify(portalData));
+
+            // Show success message
+            document.getElementById('success').classList.add('show');
+
+            console.log('✅ Courses added successfully!', portalData.courses);
+        }
+    </script>
+</body>
+
+</html>

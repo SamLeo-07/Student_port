@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes - Cynex AI Student Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="classes.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Authentication check - redirect to login if not authenticated
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-text">
+                    <span class="logo-cynex">CYNEX</span>
+                    <span class="logo-ai">AI</span>
+                </div>
+                <div class="logo-tagline">WHERE INTELLIGENCE MEETS INNOVATION</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="help-btn">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="logout-btn" id="logoutBtn" title="Logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="badge-icon">
+                <i class="fas fa-award"></i>
+                <span class="badge-count">3</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Student</div>
+                    <div class="user-batch" id="userBatch">Batch: --</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="classes.html" class="nav-item active">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Classes</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-download"></i>
+                <span>Download Certificate</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-project-diagram"></i>
+                <span>Projects</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-certificate"></i>
+                <span>Certificates</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="page-header-content">
+                <h1 class="page-title">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    Class Videos
+                </h1>
+                <p class="page-subtitle">Access all your course videos in one place</p>
+            </div>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="courseFilter">
+                        <i class="fas fa-filter"></i> Filter by Course:
+                    </label>
+                    <select id="courseFilter" class="filter-select">
+                        <option value="all">All Courses</option>
+                    </select>
+                </div>
+                <div class="video-count">
+                    <i class="fas fa-video"></i>
+                    <span id="videoCount">0</span> Videos Available
+                </div>
+            </div>
+        </section>
+
+        <!-- Videos Grid -->
+        <section class="videos-section">
+            <div class="videos-grid" id="videosGrid">
+                <!-- Videos will be loaded here dynamically -->
+                <div class="empty-state">
+                    <i class="fas fa-video"></i>
+                    <h3>No Videos Available</h3>
+                    <p>Videos added by your instructors will appear here.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="classes.js"></script>
+</body>
+
+</html>

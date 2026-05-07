@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Check Courses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .success {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        button:hover {
+            background: #1976d2;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍 Debug: Check Portal Data</h1>
+
+        <div class="info-box">
+            <strong>Purpose:</strong> This page helps you check if courses are loaded in localStorage.
+        </div>
+
+        <button onclick="checkCourses()">Check Courses</button>
+        <button onclick="addDefaultCourses()">Add Default Courses</button>
+        <button onclick="clearAndReload()">Clear All & Reload</button>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function checkCourses() {
+            const output = document.getElementById('output');
+            const portalData = JSON.parse(localStorage.getItem('portalData') || '{}');
+            const courses = portalData.courses || [];
+
+            let html = '<h2>Current Courses in localStorage:</h2>';
+
+            if (courses.length === 0) {
+                html += '<div class="info-box error"><strong>No courses found!</strong> Click "Add Default Courses" to add them.</div>';
+            } else {
+                html += `<div class="info-box success"><strong>Found ${courses.length} courses!</strong></div>`;
+                html += '<pre>' + JSON.stringify(courses, null, 2) + '</pre>';
+            }
+
+            output.innerHTML = html;
+        }
+
+        function addDefaultCourses() {
+            const portalData = JSON.parse(localStorage.getItem('portalData') || '{}');
+
+            portalData.courses = [
+                {
+                    id: Date.now() + 1,
+                    name: 'Full Stack Development',
+                    category: 'Web Development',
+                    description: 'Master modern web development with React, Node.js, and databases. Build complete web applications from scratch.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 2,
+                    name: 'Data Science & Machine Learning',
+                    category: 'Data Science',
+                    description: 'Learn Python, data analysis, machine learning algorithms, and AI fundamentals for real-world applications.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 3,
+                    name: 'Cloud Computing (AWS/Azure)',
+                    category: 'Cloud & DevOps',
+                    description: 'Master cloud platforms, deployment strategies, and scalable infrastructure management.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 4,
+                    name: 'DevOps & CI/CD',
+                    category: 'Cloud & DevOps',
+                    description: 'Learn automation, continuous integration, deployment pipelines, and modern DevOps practices.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 5,
+                    name: 'Mobile App Development',
+                    category: 'Mobile Development',
+                    description: 'Build native and cross-platform mobile applications using React Native and Flutter.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 6,
+                    name: 'Cybersecurity Fundamentals',
+                    category: 'Security',
+                    description: 'Understand security principles, ethical hacking, network security, and threat prevention.',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+
+            if (!portalData.statistics) {
+                portalData.statistics = {};
+            }
+            portalData.statistics.totalCourses = 6;
+
+            localStorage.setItem('portalData', JSON.stringify(portalData));
+
+            const output = document.getElementById('output');
+            output.innerHTML = '<div class="info-box success"><strong>✅ Default courses added successfully!</strong><br>Now go back to admin portal and refresh the page.</div>';
+
+            setTimeout(() => {
+                checkCourses();
+            }, 500);
+        }
+
+        function clearAndReload() {
+            if (confirm('This will clear ALL portal data. Continue?')) {
+                localStorage.removeItem('portalData');
+                location.reload();
+            }
+        }
+
+        // Auto-check on load
+        checkCourses();
+    </script>
+</body>
+
+</html>

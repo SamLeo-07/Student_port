@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cynex AI - Student Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Authentication check - redirect to login if not authenticated
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-text">
+                    <span class="logo-cynex">CYNEX</span>
+                    <span class="logo-ai">AI</span>
+                </div>
+                <div class="logo-tagline">WHERE INTELLIGENCE MEETS INNOVATION</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="help-btn">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="logout-btn" id="logoutBtn" title="Logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="badge-icon">
+                <i class="fas fa-award"></i>
+                <span class="badge-count">3</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">B Hemanth Kumar</div>
+                    <div class="user-batch" id="userBatch">Batch: 37R</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="classes.html" class="nav-item">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Classes</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-download"></i>
+                <span>Download Certificate</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-project-diagram"></i>
+                <span>Projects</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-certificate"></i>
+                <span>Certificates</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-card">
+                <h1 class="welcome-title" id="welcomeTitle">Welcome back, B Hemanth Kumar! 👋</h1>
+                <p class="welcome-subtitle">Ready to accelerate your learning journey?</p>
+            </div>
+        </section>
+
+        <!-- Announcements Section -->
+        <section class="announcements-section" id="announcementsSection" style="display: none;">
+            <div class="motivation-card"
+                style="background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); border-left: 5px solid #c0392b;">
+                <div class="motivation-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="motivation-content">
+                    <h3 class="motivation-title" id="announcementTitle">Important Announcement</h3>
+                    <p class="motivation-text" id="announcementMessage">Check the latest updates from your instructors.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daily Motivation -->
+        <section class="motivation-section">
+            <div class="motivation-card">
+                <div class="motivation-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="motivation-content">
+                    <h3 class="motivation-title">Daily Motivation</h3>
+                    <p class="motivation-text">Hard work beats talent when talent doesn't work hard.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Cards -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <!-- Interview Prep Card -->
+                <div class="stat-card">
+                    <div class="stat-icon interview-prep">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Interview Prep</div>
+                        <div class="stat-value">17</div>
+                        <div class="stat-description">Lecture Categories Available</div>
+                        <a href="#" class="stat-link">Click to explore categories →</a>
+                    </div>
+                </div>
+
+                <!-- Resume Templates Card -->
+                <div class="stat-card">
+                    <div class="stat-icon templates">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Templates</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-description">Resume Templates Ready</div>
+                        <a href="#" class="stat-link">Click to view templates →</a>
+                    </div>
+                </div>
+
+                <!-- Achievements Card -->
+                <div class="stat-card">
+                    <div class="stat-icon achievements">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Achievements</div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-description">Certificates Earned</div>
+                        <a href="#" class="stat-link">Click to view certificates →</a>
+                    </div>
+                </div>
+
+                <!-- Progress Card -->
+                <div class="stat-card progress-card">
+                    <div class="stat-icon progress">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Keep Going!</div>
+                        <div class="stat-description">Your journey to excellence continues</div>
+                        <a href="#" class="stat-link">Check classes for details →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses & Videos Section -->
+        <section class="bottom-section">
+            <div class="bottom-grid">
+                <!-- Available Courses -->
+                <div class="interview-categories">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-book-open"></i> Available Courses
+                        </h2>
+                    </div>
+                    <div class="categories-content" id="coursesContent">
+                        <p class="categories-placeholder">No courses available yet. Check back later!</p>
+                    </div>
+                </div>
+
+                <!-- Class Videos -->
+                <div class="latest-certificate">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-video"></i> Class Videos
+                        </h2>
+                    </div>
+                    <div class="certificate-content" id="videosContent">
+                        <p class="certificate-placeholder">No videos uploaded yet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Certificates Section -->
+        <section class="certificates-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-certificate"></i> My Certificates
+                </h2>
+            </div>
+            <div class="certificates-grid" id="certificatesContent">
+                <p class="categories-placeholder">No certificates earned yet. Complete courses to earn certificates!</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

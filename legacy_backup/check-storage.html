@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check localStorage</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍 localStorage Checker</h1>
+        <p>This page helps you check what's actually stored in localStorage</p>
+
+        <button onclick="checkStorage()">Check Storage</button>
+        <button class="btn-success" onclick="addCoursesNow()">Add 6 Courses Now</button>
+        <button class="btn-danger" onclick="clearStorage()">Clear All Data</button>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function checkStorage() {
+            const output = document.getElementById('output');
+            const portalData = localStorage.getItem('portalData');
+
+            let html = '<h2>Storage Check Results:</h2>';
+
+            if (!portalData) {
+                html += '<div class="status error">❌ No portalData found in localStorage!</div>';
+                html += '<p>Click "Add 6 Courses Now" to fix this.</p>';
+            } else {
+                const data = JSON.parse(portalData);
+                const courseCount = data.courses ? data.courses.length : 0;
+                const videoCount = data.videos ? data.videos.length : 0;
+
+                if (courseCount === 0) {
+                    html += '<div class="status warning">⚠️ portalData exists but has 0 courses!</div>';
+                    html += '<p>Click "Add 6 Courses Now" to add courses.</p>';
+                } else {
+                    html += `<div class="status success">✅ Found ${courseCount} courses in localStorage!</div>`;
+                }
+
+                html += `<h3>Statistics:</h3>`;
+                html += `<ul>`;
+                html += `<li><strong>Courses:</strong> ${courseCount}</li>`;
+                html += `<li><strong>Videos:</strong> ${videoCount}</li>`;
+                html += `<li><strong>Announcements:</strong> ${data.announcements ? data.announcements.length : 0}</li>`;
+                html += `<li><strong>Certificates:</strong> ${data.certificates ? data.certificates.length : 0}</li>`;
+                html += `</ul>`;
+
+                if (courseCount > 0) {
+                    html += `<h3>Course List:</h3>`;
+                    html += '<pre>' + JSON.stringify(data.courses, null, 2) + '</pre>';
+                }
+
+                html += `<h3>Full portalData:</h3>`;
+                html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            }
+
+            output.innerHTML = html;
+        }
+
+        function addCoursesNow() {
+            let portalData = JSON.parse(localStorage.getItem('portalData') || '{}');
+
+            // Initialize structure
+            if (!portalData.announcements) portalData.announcements = [];
+            if (!portalData.videos) portalData.videos = [];
+            if (!portalData.certificates) portalData.certificates = [];
+            if (!portalData.interviewQuestions) portalData.interviewQuestions = [];
+            if (!portalData.students) portalData.students = [];
+
+            // Add courses
+            portalData.courses = [
+                {
+                    id: Date.now() + 1,
+                    name: 'Full Stack Development',
+                    category: 'Web Development',
+                    description: 'Master modern web development with React, Node.js, and databases. Build complete web applications from scratch.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 2,
+                    name: 'Data Science & Machine Learning',
+                    category: 'Data Science',
+                    description: 'Learn Python, data analysis, machine learning algorithms, and AI fundamentals for real-world applications.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 3,
+                    name: 'Cloud Computing (AWS/Azure)',
+                    category: 'Cloud & DevOps',
+                    description: 'Master cloud platforms, deployment strategies, and scalable infrastructure management.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 4,
+                    name: 'DevOps & CI/CD',
+                    category: 'Cloud & DevOps',
+                    description: 'Learn automation, continuous integration, deployment pipelines, and modern DevOps practices.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 5,
+                    name: 'Mobile App Development',
+                    category: 'Mobile Development',
+                    description: 'Build native and cross-platform mobile applications using React Native and Flutter.',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 6,
+                    name: 'Cybersecurity Fundamentals',
+                    category: 'Security',
+                    description: 'Understand security principles, ethical hacking, network security, and threat prevention.',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+
+            if (!portalData.statistics) portalData.statistics = {};
+            portalData.statistics.totalCourses = 6;
+            portalData.statistics.totalStudents = portalData.statistics.totalStudents || 0;
+            portalData.statistics.totalVideos = portalData.statistics.totalVideos || 0;
+            portalData.statistics.totalCertificates = portalData.statistics.totalCertificates || 0;
+
+            localStorage.setItem('portalData', JSON.stringify(portalData));
+
+            alert('✅ 6 courses added successfully!\n\nNow:\n1. Go to student portal: http://localhost:8000/classes.html\n2. Refresh the page (F5)\n3. Check the course dropdown!');
+
+            checkStorage();
+        }
+
+        function clearStorage() {
+            if (confirm('This will delete ALL portal data. Are you sure?')) {
+                localStorage.clear();
+                alert('All data cleared!');
+                checkStorage();
+            }
+        }
+
+        // Auto-check on load
+        window.onload = checkStorage;
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "student-portal-monorepo",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=frontend",
+    "install:all": "npm install",
+    "start:backend": "npm start --workspace=backend",
+    "start:frontend": "npm run build --workspace=frontend && npm run preview --workspace=frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

@@ -1,0 +1,33 @@
+--- COURSES ---
+[
+  {
+    "id": 3,
+    "title": "Data Science with AI"
+  },
+  {
+    "id": 4,
+    "title": "Python Developer"
+  }
+]
+
+--- USERS (Venky) ---
+[
+  {
+    "id": 6,
+    "name": "Venky"
+  }
+]
+
+--- STUDENTS (user_id = 6) ---
+[]
+
+--- ENROLLMENTS SCHEMA ---
+CREATE TABLE enrollments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                student_id INTEGER,
+                course_id INTEGER,
+                enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY(student_id) REFERENCES "users_old"(id),
+                FOREIGN KEY(course_id) REFERENCES courses(id),
+                UNIQUE(student_id, course_id)
+            )

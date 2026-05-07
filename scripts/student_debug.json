@@ -1,0 +1,21 @@
+{
+  "user": {
+    "name": "Sai",
+    "batch_id": null
+  },
+  "enrollments": [
+    {
+      "id": 6,
+      "student_id": 2,
+      "course_id": 3,
+      "enrolled_at": "2026-03-02 12:36:38"
+    },
+    {
+      "id": 2,
+      "student_id": 2,
+      "course_id": 4,
+      "enrolled_at": "2026-02-18 07:15:31"
+    }
+  ],
+  "batchCourses": []
+}

@@ -1,0 +1,120 @@
+--- USERS ---
+[
+  {
+    "id": 1,
+    "name": "prudhvi",
+    "email": "prudhvi@gmail.com",
+    "role": "student",
+    "batch_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Sai Updated",
+    "email": "sai@gmail.com",
+    "role": "student",
+    "batch_id": 1
+  },
+  {
+    "id": 3,
+    "name": "Admin User",
+    "email": "admin@cynex.ai",
+    "role": "admin",
+    "batch_id": null
+  },
+  {
+    "id": 4,
+    "name": "Super Admin",
+    "email": "super@cynex.ai",
+    "role": "super_admin",
+    "batch_id": 1
+  },
+  {
+    "id": 5,
+    "name": "Raj",
+    "email": "raj@gmail.com",
+    "role": "student",
+    "batch_id": 1
+  },
+  {
+    "id": 6,
+    "name": "Venky",
+    "email": "venky@gmail.com",
+    "role": "student",
+    "batch_id": 1
+  },
+  {
+    "id": 1000,
+    "name": "Admin User",
+    "email": "admin@gmail.com",
+    "role": "admin",
+    "batch_id": null
+  },
+  {
+    "id": 1001,
+    "name": "Student User",
+    "email": "student@gmail.com",
+    "role": "student",
+    "batch_id": 1
+  }
+]
+
+--- ENROLLMENTS ---
+[
+  {
+    "id": 1,
+    "student_id": 1,
+    "course_id": 3,
+    "enrolled_at": "2026-02-17 10:49:42"
+  },
+  {
+    "id": 3,
+    "student_id": 6,
+    "course_id": 3,
+    "enrolled_at": "2026-02-18 07:46:51"
+  },
+  {
+    "id": 4,
+    "student_id": 6,
+    "course_id": 4,
+    "enrolled_at": "2026-02-18 07:47:37"
+  },
+  {
+    "id": 7,
+    "student_id": 5,
+    "course_id": 3,
+    "enrolled_at": "2026-03-04 11:44:37"
+  },
+  {
+    "id": 8,
+    "student_id": 1001,
+    "course_id": 4,
+    "enrolled_at": "2026-03-31 06:21:19"
+  }
+]
+
+--- BATCH COURSES ---
+[
+  {
+    "id": 1,
+    "batch_id": 1,
+    "course_id": 3,
+    "assigned_at": "2026-02-17 06:42:42"
+  }
+]
+
+--- BATCHES ---
+[
+  "Error querying \"SELECT id, name FROM batches\": SQL_INPUT_ERROR: SQLite input error: no such column: name (at offset 11)"
+]
+
+--- COURSES ---
+[
+  {
+    "id": 3,
+    "title": "Data Science with AI"
+  },
+  {
+    "id": 4,
+    "title": "Python Developer"
+  }
+]

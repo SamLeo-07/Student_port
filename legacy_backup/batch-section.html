@@ -1,0 +1,40 @@
+<!-- Batches Section -->
+<section class="content-section" id="batches-section">
+    <div class="section-header">
+        <h1 class="section-title">Manage Batches</h1>
+        <p class="section-subtitle">Create and manage batches, assign courses to batches</p>
+    </div>
+
+    <div class="content-card">
+        <div class="card-header">
+            <h3>Batches</h3>
+            <button class="btn-primary" onclick="openAddBatchModal()">
+                <i class="fas fa-plus"></i> Add Batch
+            </button>
+        </div>
+        <div class="card-body">
+            <!-- Batches Table -->
+            <div class="table-container">
+                <table class="data-table" id="batchesTable">
+                    <thead>
+                        <tr>
+                            <th>Batch ID</th>
+                            <th>Batch Name</th>
+                            <th>Description</th>
+                            <th>Duration</th>
+                            <th>Assigned Courses</th>
+                            <th>Students</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batchesTableBody">
+                        <tr>
+                            <td colspan="8" class="no-data">No batches created yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

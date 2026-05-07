@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player Test</title>
+    <link rel="stylesheet" href="classes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .test-info {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #2196f3;
+        }
+
+        .test-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .test-btn {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1><i class="fas fa-play-circle"></i> Video Player Test</h1>
+
+        <div class="test-info">
+            <strong>Test Instructions:</strong>
+            <p>Click any button below to test the embedded video player with different YouTube URL formats.</p>
+        </div>
+
+        <div class="test-buttons">
+            <button class="test-btn" onclick="testVideo1()">
+                <i class="fas fa-play"></i>
+                Test 1: Standard YouTube URL (watch?v=)
+            </button>
+
+            <button class="test-btn" onclick="testVideo2()">
+                <i class="fas fa-play"></i>
+                Test 2: Short YouTube URL (youtu.be/)
+            </button>
+
+            <button class="test-btn" onclick="testVideo3()">
+                <i class="fas fa-play"></i>
+                Test 3: Already Embedded URL
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // YouTube URL converter function
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return '';
+
+            if (url.includes('/embed/')) {
+                return url;
+            }
+
+            let videoId = '';
+
+            if (url.includes('youtube.com/watch')) {
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                videoId = urlParams.get('v');
+            }
+            else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            }
+            else if (url.includes('youtube.com/v/')) {
+                videoId = url.split('/v/')[1].split('?')[0];
+            }
+
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+        }
+
+        // Open video player modal
+        function openVideoPlayer(videoUrl, videoTitle) {
+            const embedUrl = getYouTubeEmbedUrl(videoUrl);
+
+            const modalHTML = `
+                <div class="video-modal" id="videoModal">
+                    <div class="video-modal-backdrop" onclick="closeVideoPlayer()"></div>
+                    <div class="video-modal-content">
+                        <div class="video-modal-header">
+                            <h3 class="video-modal-title">${videoTitle}</h3>
+                            <button class="video-modal-close" onclick="closeVideoPlayer()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="video-modal-body">
+                            <div class="video-container">
+                                <iframe 
+                                    src="${embedUrl}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close video player modal
+        function closeVideoPlayer() {
+            const modal = document.getElementById('videoModal');
+            if (modal) {
+                modal.remove();
+            }
+            document.body.style.overflow = '';
+        }
+
+        // Test functions
+        function testVideo1() {
+            openVideoPlayer(
+                'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                'Test 1: Standard YouTube URL Format'
+            );
+        }
+
+        function testVideo2() {
+            openVideoPlayer(
+                'https://youtu.be/dQw4w9WgXcQ',
+                'Test 2: Short YouTube URL Format'
+            );
+        }
+
+        function testVideo3() {
+            openVideoPlayer(
+                'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                'Test 3: Already Embedded URL Format'
+            );
+        }
+    </script>
+</body>
+
+</html>

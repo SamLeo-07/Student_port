@@ -1,0 +1,8 @@
+- name: prudhvi, email: prudhvi@gmail.com, role: student
+- name: Sai Updated, email: sai@gmail.com, role: student
+- name: Admin User, email: admin@cynex.ai, role: admin
+- name: Super Admin, email: super@cynex.ai, role: super_admin
+- name: Raj, email: raj@gmail.com, role: student
+- name: Venky, email: venky@gmail.com, role: student
+- name: Admin User, email: admin@gmail.com, role: admin
+- name: Student User, email: student@gmail.com, role: student
