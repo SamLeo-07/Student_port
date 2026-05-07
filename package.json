@@ -9,7 +9,8 @@
     "dev": "npm run dev --workspace=frontend",
     "install:all": "npm install",
     "start:backend": "npm start --workspace=backend",
-    "start:frontend": "npm run build --workspace=frontend && npm run preview --workspace=frontend"
+    "start:frontend": "npm run build --workspace=frontend && npm run preview --workspace=frontend",
+    "build": "npm run build --workspace=frontend"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
