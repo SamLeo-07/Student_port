@@ -5,12 +5,10 @@
 [functions]
   directory = "backend"
   node_bundler = "esbuild"
-  # This tells Netlify to treat all .js files as ESM
-  included_files = ["backend/package.json"]
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/index/api/:splat"
+  to = "/.netlify/functions/api/api/:splat"
   status = 200
 
 [[redirects]]
