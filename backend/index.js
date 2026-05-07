@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import serverless from 'serverless-http';
 import { fileURLToPath } from 'url';
 import { db } from './db.js';
 
@@ -55,6 +56,11 @@ app.get('/', (req, res) => {
     res.json({ message: 'Student Portal API is running' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+export const handler = serverless(app);
+export default app;
