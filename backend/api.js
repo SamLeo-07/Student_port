@@ -41,16 +41,24 @@ import videosRouter from './routes/videos.js';
 import attendanceRouter from './routes/attendance.js';
 import youtubeRouter from './routes/youtube.js';
 
-app.use('/api/auth', authRoutes);
-app.use('/api/courses', courseRoutes);
-app.use('/api/students', studentRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/batches', batchesRouter);
-app.use('/api/modules', modulesRouter);
-app.use('/api/videos', videosRouter);
-app.use('/api/attendance', attendanceRouter);
-app.use('/api/youtube', youtubeRouter);
+const apiRouter = express.Router();
+
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/courses', courseRoutes);
+apiRouter.use('/students', studentRoutes);
+apiRouter.use('/admin', adminRoutes);
+apiRouter.use('/projects', projectRoutes);
+apiRouter.use('/batches', batchesRouter);
+apiRouter.use('/modules', modulesRouter);
+apiRouter.use('/videos', videosRouter);
+apiRouter.use('/attendance', attendanceRouter);
+apiRouter.use('/youtube', youtubeRouter);
+
+// Mount on multiple possible path prefixes for Netlify compatibility
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
+app.use('/.netlify/functions/api', apiRouter);
+app.use('/.netlify/functions/api/api', apiRouter);
 
 app.get('/', (req, res) => {
     res.json({ message: 'Student Portal API is running' });
