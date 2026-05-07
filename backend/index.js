@@ -8,8 +8,13 @@ import { db } from './db.js';
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+let __dirname = '';
+try {
+    const __filename = fileURLToPath(import.meta.url);
+    __dirname = path.dirname(__filename);
+} catch (e) {
+    // Fallback for non-ESM environments if needed
+}
 
 const app = express();
 const PORT = process.env.PORT || 5002;
