@@ -5,10 +5,8 @@
 [functions]
   directory = "backend"
   node_bundler = "esbuild"
-
-[functions.index]
-  node_bundler = "esbuild"
-  format = "esm"
+  # This tells Netlify to treat all .js files as ESM
+  included_files = ["backend/package.json"]
 
 [[redirects]]
   from = "/api/*"
