@@ -1,4 +1,4 @@
-import { createClient } from "@libsql/client/web/web";
+import { createClient } from "@libsql/client/web";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
