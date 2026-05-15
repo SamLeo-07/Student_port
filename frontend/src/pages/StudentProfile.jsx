@@ -189,7 +189,9 @@ const StudentProfile = () => {
                     padding: '0 2rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '1.5rem'
+                    gap: '1.5rem',
+                    position: 'relative',
+                    zIndex: '10'
                 }}>
                     <div style={{
                         backgroundColor: 'white',
@@ -208,10 +210,10 @@ const StudentProfile = () => {
                             <div style={{ position: 'relative', width: '130px', height: '130px', marginTop: '-80px' }}>
                                 <div style={{
                                     width: '100%', height: '100%', borderRadius: '50%',
-                                    backgroundColor: 'white', border: '5px solid white',
+                                    backgroundColor: 'var(--bg-dark)', border: '5px solid var(--border-color)',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     fontSize: '3.5rem', fontWeight: 'bold', overflow: 'hidden',
-                                    boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
+                                    boxShadow: '0 8px 32px rgba(14, 165, 233, 0.2)'
                                 }}>
                                     {user.profile_photo ? (
                                         <img 
@@ -248,17 +250,17 @@ const StudentProfile = () => {
                             </div>
 
                             <div>
-                                <h1 style={{ fontSize: '1.875rem', fontWeight: '800', color: '#1E293B', marginBottom: '0.35rem', letterSpacing: '-0.025em' }}>{user.name}</h1>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#64748B', fontSize: '0.9rem' }}>
+                                <h1 style={{ fontSize: '1.875rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.35rem', letterSpacing: '-0.025em' }}>{user.name}</h1>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                        <Mail size={16} color="#94A3B8" /> {user.email}
+                                        <Mail size={16} color="var(--primary)" /> {user.email}
                                     </div>
-                                    <span style={{ height: '4px', width: '4px', borderRadius: '50%', backgroundColor: '#CBD5E1' }}></span>
+                                    <span style={{ height: '4px', width: '4px', borderRadius: '50%', backgroundColor: 'var(--border-color)' }}></span>
                                     <span style={{ 
-                                        backgroundColor: '#F0F9FF', color: '#0369A1', 
+                                        backgroundColor: 'rgba(14, 165, 233, 0.1)', color: 'var(--primary)', 
                                         padding: '0.2rem 0.6rem', borderRadius: '6px', 
                                         fontWeight: '700', fontSize: '0.75rem',
-                                        border: '1px solid #E0F2FE'
+                                        border: '1px solid rgba(14, 165, 233, 0.2)'
                                     }}>
                                         {profile.batch_name || 'ELITE BATCH'}
                                     </span>
@@ -267,45 +269,75 @@ const StudentProfile = () => {
                         </div>
 
                         {/* Action Bar */}
-                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        <div style={{ 
+                            display: 'flex', 
+                            gap: '0.75rem', 
+                            flexWrap: 'wrap',
+                            alignItems: 'center'
+                        }}>
                              {!editing ? (
                                 <>
                                     <button
                                         onClick={() => {}} 
                                         style={{
                                             display: 'flex', alignItems: 'center', gap: '0.5rem',
-                                            padding: '0.625rem 1.25rem', backgroundColor: '#F8FAFC',
-                                            color: '#475569', border: '1px solid #E2E8F0', borderRadius: '0.75rem',
-                                            cursor: 'pointer', fontWeight: '600', fontSize: '0.875rem',
-                                            transition: 'all 0.2s'
+                                            padding: '0.75rem 1.5rem', 
+                                            backgroundColor: 'white',
+                                            color: '#64748B', 
+                                            border: '1px solid #E2E8F0', 
+                                            borderRadius: '0.875rem',
+                                            cursor: 'pointer', 
+                                            fontWeight: '700', 
+                                            fontSize: '0.875rem',
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
                                         }}
+                                        onMouseOver={(e) => { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; }}
+                                        onMouseOut={(e) => { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; }}
                                     >
-                                        <PlayCircle size={16} /> View Profile
+                                        <PlayCircle size={18} /> View Profile
                                     </button>
                                     <button
                                         onClick={() => window.open(profile.resume_link, '_blank')}
                                         disabled={!profile.resume_link}
                                         style={{
                                             display: 'flex', alignItems: 'center', gap: '0.5rem',
-                                            padding: '0.625rem 1.25rem', backgroundColor: '#F8FAFC',
-                                            color: '#475569', border: '1px solid #E2E8F0', borderRadius: '0.75rem',
-                                            cursor: profile.resume_link ? 'pointer' : 'not-allowed', fontWeight: '600', fontSize: '0.875rem',
-                                            opacity: profile.resume_link ? 1 : 0.6
+                                            padding: '0.75rem 1.5rem', 
+                                            backgroundColor: 'white',
+                                            color: '#64748B', 
+                                            border: '1px solid #E2E8F0', 
+                                            borderRadius: '0.875rem',
+                                            cursor: profile.resume_link ? 'pointer' : 'not-allowed', 
+                                            fontWeight: '700', 
+                                            fontSize: '0.875rem',
+                                            opacity: profile.resume_link ? 1 : 0.5,
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
                                         }}
+                                        onMouseOver={(e) => { if(profile.resume_link) { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; } }}
+                                        onMouseOut={(e) => { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; }}
                                     >
-                                        <FileText size={16} /> Resume
+                                        <FileText size={18} /> Resume
                                     </button>
                                     <button
                                         onClick={() => setEditing(true)}
                                         style={{
                                             display: 'flex', alignItems: 'center', gap: '0.5rem',
-                                            padding: '0.625rem 1.5rem', backgroundColor: 'var(--primary)',
-                                            color: 'white', border: 'none', borderRadius: '0.75rem',
-                                            cursor: 'pointer', fontWeight: '600', fontSize: '0.875rem',
-                                            boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)'
+                                            padding: '0.75rem 1.75rem', 
+                                            background: 'linear-gradient(135deg, #4F46E5 0%, #3730A3 100%)',
+                                            color: 'white', 
+                                            border: 'none', 
+                                            borderRadius: '0.875rem',
+                                            cursor: 'pointer', 
+                                            fontWeight: '700', 
+                                            fontSize: '0.875rem',
+                                            boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)',
+                                            transition: 'all 0.3s ease'
                                         }}
+                                        onMouseOver={(e) => { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = '0 12px 20px -3px rgba(79, 70, 229, 0.4)'; }}
+                                        onMouseOut={(e) => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 10px 15px -3px rgba(79, 70, 229, 0.3)'; }}
                                     >
-                                        <Edit3 size={16} /> Edit Profile
+                                        <Edit3 size={18} /> Edit Profile
                                     </button>
                                 </>
                             ) : (
@@ -360,10 +392,10 @@ const StudentProfile = () => {
                     <Card style={{ padding: '2rem', borderRadius: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                             <div>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1E293B', marginBottom: '0.25rem' }}>Personal Details</h3>
-                                <p style={{ fontSize: '0.875rem', color: '#64748B' }}>Primary identity and contact information</p>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.25rem' }}>Personal Details</h3>
+                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Primary identity and contact information</p>
                             </div>
-                            <div style={{ width: '48px', height: '48px', backgroundColor: '#F0FDF4', color: '#16A34A', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ width: '48px', height: '48px', backgroundColor: 'rgba(14, 165, 233, 0.1)', color: 'var(--primary)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <User size={24} />
                             </div>
                         </div>
@@ -415,8 +447,8 @@ const StudentProfile = () => {
                                             {item.icon}
                                         </div>
                                         <div>
-                                            <p style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', marginBottom: '0.35rem', letterSpacing: '0.05em' }}>{item.label}</p>
-                                            <p style={{ fontSize: '1rem', fontWeight: '600', color: '#334155' }}>{item.value}</p>
+                                            <p style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.35rem', letterSpacing: '0.05em' }}>{item.label}</p>
+                                            <p style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)' }}>{item.value}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -428,10 +460,10 @@ const StudentProfile = () => {
                     <Card style={{ padding: '2rem', borderRadius: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                             <div>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1E293B', marginBottom: '0.25rem' }}>Academic Profile</h3>
-                                <p style={{ fontSize: '0.875rem', color: '#64748B' }}>Educational background and qualifications</p>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.25rem' }}>Academic Profile</h3>
+                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Educational background and qualifications</p>
                             </div>
-                            <div style={{ width: '48px', height: '48px', backgroundColor: '#EFF6FF', color: '#2563EB', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ width: '48px', height: '48px', backgroundColor: 'rgba(14, 165, 233, 0.1)', color: 'var(--primary)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <BookOpen size={24} />
                             </div>
                         </div>
@@ -470,8 +502,8 @@ const StudentProfile = () => {
                                             {item.icon}
                                         </div>
                                         <div>
-                                            <p style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', marginBottom: '0.35rem', letterSpacing: '0.05em' }}>{item.label}</p>
-                                            <p style={{ fontSize: '1rem', fontWeight: '600', color: '#334155' }}>{item.value}</p>
+                                            <p style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.35rem', letterSpacing: '0.05em' }}>{item.label}</p>
+                                            <p style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)' }}>{item.value}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -482,10 +514,10 @@ const StudentProfile = () => {
                     <Card style={{ padding: '2rem', borderRadius: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                             <div>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1E293B', marginBottom: '0.25rem' }}>Skills & Experience</h3>
-                                <p style={{ fontSize: '0.875rem', color: '#64748B' }}>Professional toolkit and career highlights</p>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.25rem' }}>Skills & Experience</h3>
+                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Professional toolkit and career highlights</p>
                             </div>
-                            <div style={{ width: '48px', height: '48px', backgroundColor: '#F5F3FF', color: '#7C3AED', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ width: '48px', height: '48px', backgroundColor: 'rgba(14, 165, 233, 0.1)', color: 'var(--primary)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <Award size={24} />
                             </div>
                         </div>
@@ -579,15 +611,15 @@ const StudentProfile = () => {
                         </div>
                     </Card>
 
-                    <Card style={{ padding: '1.75rem', borderRadius: '1.25rem', textAlign: 'center', background: 'linear-gradient(to bottom, #FFFFFF, #F8FAFC)' }}>
-                        <div style={{ width: '60px', height: '60px', backgroundColor: '#F0FDF4', color: '#16A34A', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', border: '4px solid #DCFCE7' }}>
+                    <Card style={{ padding: '1.75rem', borderRadius: '1.25rem', textAlign: 'center', background: 'var(--bg-surface)' }}>
+                        <div style={{ width: '60px', height: '60px', backgroundColor: 'rgba(22, 163, 74, 0.1)', color: '#16A34A', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', border: '4px solid rgba(22, 163, 74, 0.2)' }}>
                             <CheckCircle size={30} />
                         </div>
-                        <h3 style={{ fontWeight: '800', color: '#1E293B', marginBottom: '0.5rem' }}>Verified Student</h3>
-                        <p style={{ fontSize: '0.875rem', color: '#64748B', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                        <h3 style={{ fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.5rem' }}>Verified Student</h3>
+                        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1.5rem' }}>
                             Your profile is verified. You have full access to all Cynex AI resources.
                         </p>
-                        <div style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: '600', padding: '0.75rem', backgroundColor: 'white', borderRadius: '0.75rem', border: '1px dashed #E2E8F0' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600', padding: '0.75rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', border: '1px dashed var(--border-color)' }}>
                             Student since {new Date(user.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
                         </div>
                     </Card>

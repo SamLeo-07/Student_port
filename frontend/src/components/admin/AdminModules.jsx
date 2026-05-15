@@ -82,34 +82,34 @@ const AdminModules = () => {
                 </Button>
             </div>
 
-            {loading ? <p>Loading modules...</p> : (
+            {loading ? <p style={{ color: 'var(--text-muted)' }}>Loading modules...</p> : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
                     {modules.map(module => (
-                        <Card key={module.id}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                                <div style={{ padding: '0.75rem', backgroundColor: '#eff6ff', borderRadius: '0.5rem', color: '#1d4ed8' }}>
+                        <Card key={module.id} padding="1.5rem">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+                                <div style={{ padding: '0.75rem', backgroundColor: 'rgba(14, 165, 233, 0.1)', border: '1px solid var(--border-color)', borderRadius: '0.75rem', color: 'var(--primary)' }}>
                                     <Layers size={24} />
                                 </div>
                                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                                     <button
                                         onClick={() => handleEdit(module)}
-                                        style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--gray)', padding: '0.25rem' }}
+                                        style={{ border: '1px solid var(--border-color)', background: 'var(--bg-surface)', height: '32px', width: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-main)' }}
                                     >
-                                        <Edit2 size={16} />
+                                        <Edit2 size={14} />
                                     </button>
                                     <button
                                         onClick={() => handleDelete(module.id)}
-                                        style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#ef4444', padding: '0.25rem' }}
+                                        style={{ border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)', height: '32px', width: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ef4444' }}
                                     >
-                                        <Trash2 size={16} />
+                                        <Trash2 size={14} />
                                     </button>
                                 </div>
                             </div>
-                            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--text)', marginBottom: '0.5rem' }}>{module.title}</h3>
-                            <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', minHeight: '40px' }}>{module.description || 'No description available.'}</p>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>{module.title}</h3>
+                            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', minHeight: '40px', lineHeight: '1.5' }}>{module.description || 'No description available.'}</p>
                         </Card>
                     ))}
-                    {modules.length === 0 && <p style={{ color: 'var(--text-light)' }}>No modules found. Create one to get started.</p>}
+                    {modules.length === 0 && <p style={{ color: 'var(--text-muted)', padding: '2rem', textAlign: 'center', gridColumn: '1 / -1', background: 'var(--bg-surface)', borderRadius: '1rem', border: '1px dashed var(--border-color)' }}>No modules found. Create one to get started.</p>}
                 </div>
             )}
 

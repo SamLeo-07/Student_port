@@ -1,13 +1,18 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { db } from '../db.js';
 
-const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
-// Master password for easy admin access to any student account
-const MASTER_PASSWORD = 'portal123';
+const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-me';
+
 
 // --- Functional Helpers ---
 
@@ -77,8 +82,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        // Master password bypass — allows admin to log into any student account
-        const isMatch = (password === MASTER_PASSWORD) || await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });

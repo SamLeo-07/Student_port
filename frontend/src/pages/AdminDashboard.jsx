@@ -3,6 +3,7 @@ import { useData } from '../context/DataContext';
 import Card from '../components/Card';
 import { Users, BookOpen, Video, Award, MessageSquare, Shield, Activity, TrendingUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import ProjectApprovals from '../components/admin/ProjectApprovals';
 import ContentManagement from '../components/admin/ContentManagement';
 import AdminAssessments from '../components/admin/AdminAssessments';
@@ -11,18 +12,18 @@ import AdminStudents from '../components/admin/AdminStudents';
 
 
 const AdminDashboard = () => {
+    const { logout } = useAuth();
     const { data } = useData();
     const { students = [], courses = [], videos = [], certificates = [] } = data;
     const [activeTab, setActiveTab] = useState('overview');
 
     const tabs = [
-        { id: 'overview', label: 'Overview', icon: <Users size={18} /> },
+        { id: 'overview', label: 'Dashboard', icon: <Activity size={18} /> },
         { id: 'students', label: 'Students', icon: <Users size={18} /> },
-        { id: 'content', label: 'Content Management', icon: <BookOpen size={18} /> },
+        { id: 'content', label: 'Courses & Content', icon: <BookOpen size={18} /> },
         { id: 'assessments', label: 'Assessments', icon: <BookOpen size={18} /> },
         { id: 'projects', label: 'Projects', icon: <BookOpen size={18} /> },
         { id: 'approvals', label: 'Certificates', icon: <Award size={18} /> },
-        { id: 'announcements', label: 'Announcements', icon: <MessageSquare size={18} /> },
     ];
 
     const renderContent = () => {
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
                             <div style={{ position: 'absolute', top: '-30%', right: '-30%', width: '180px', height: '180px', background: 'radial-gradient(circle, rgba(56,189,248,0.2) 0%, transparent 70%)', filter: 'blur(20px)' }} />
                             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', transform: 'translateZ(40px)' }}>
                                 <div>
-                                    <p style={{ color: '#bae6fd', fontSize: '0.85rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Operatives</p>
+                                    <p style={{ color: '#bae6fd', fontSize: '0.85rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Students</p>
                                     <h3 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#f8fafc', marginTop: '0.25rem', textShadow: '0 0 20px rgba(56, 189, 248, 0.5)' }}>
                                         {students.length}
                                     </h3>
@@ -173,14 +174,21 @@ const AdminDashboard = () => {
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
                             <div>
                                 <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#f8fafc', letterSpacing: '-0.025em', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <Activity size={24} color="#38bdf8" /> Recent Personnel Access
+                                    <Activity size={24} color="#38bdf8" /> Recent Student Access
                                 </h3>
-                                <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.25rem' }}>Live registry of newly instantiated operatives.</p>
+                                <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.25rem' }}>Live registry of newly joined students.</p>
                             </div>
-                            <button style={{ 
-                                color: '#f8fafc', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', 
-                                background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '0.6rem 1.2rem', borderRadius: '0.5rem', cursor: 'pointer',
-                            }}>
+                            <button 
+                                onClick={() => {
+                                    if(window.confirm('Terminate administrative session?')) {
+                                        logout();
+                                        window.location.href = '/login';
+                                    }
+                                }}
+                                style={{ 
+                                    color: '#f8fafc', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', 
+                                    background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '0.6rem 1.2rem', borderRadius: '0.5rem', cursor: 'pointer',
+                                }}>
                                 Terminate Feed
                             </button>
                         </div>
@@ -189,10 +197,10 @@ const AdminDashboard = () => {
                             <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.5rem', fontSize: '0.9rem' }}>
                                 <thead>
                                     <tr style={{ textAlign: 'left' }}>
-                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Identity</th>
-                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Comm Link [Email]</th>
-                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Squadron [Batch]</th>
-                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Timestamp</th>
+                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Student Name</th>
+                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Email</th>
+                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Batch</th>
+                                        <th style={{ padding: '0.5rem 1rem', color: '#475569', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Joined Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>

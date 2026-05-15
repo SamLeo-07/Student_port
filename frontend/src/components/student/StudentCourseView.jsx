@@ -180,9 +180,9 @@ const StudentCourseView = ({ courseId, onBack }) => {
                 <ChevronLeft size={20} style={{ marginRight: '0.5rem' }} /> Back to My Courses
             </Button>
 
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--text)' }}>{course.title}</h1>
-                <p style={{ color: 'var(--text-light)' }}>{course.description}</p>
+            <div style={{ marginBottom: '2.5rem' }}>
+                <h1 style={{ fontSize: '2.25rem', fontWeight: '900', color: 'var(--text-main)', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>{course.title}</h1>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '800px', lineHeight: '1.6' }}>{course.description}</p>
             </div>
 
             {/* Tabs */}
@@ -250,10 +250,10 @@ const StudentCourseView = ({ courseId, onBack }) => {
                                 </p>
                             </div>
                         ) : (
-                            <div style={{ textAlign: 'center', padding: '3rem', backgroundColor: 'white', borderRadius: '0.5rem', border: '2px dashed #d1d5db' }}>
-                                <Video size={48} color="#9ca3af" style={{ marginBottom: '1rem' }} />
-                                <h3 style={{ color: '#374151' }}>No Class Selected</h3>
-                                <p style={{ color: '#6b7280' }}>Select a class from the list to watch.</p>
+                            <div style={{ textAlign: 'center', padding: '5rem 2rem', backgroundColor: 'var(--bg-surface)', borderRadius: '1rem', border: '2px dashed var(--border-color)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                <Video size={64} color="var(--text-muted)" style={{ marginBottom: '1.5rem', opacity: 0.3 }} />
+                                <h3 style={{ color: 'var(--text-main)', fontWeight: '800', fontSize: '1.25rem' }}>Tactical Briefing Offline</h3>
+                                <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Select a transmission from the logs to begin.</p>
                             </div>
                         )}
                     </div>
@@ -306,24 +306,27 @@ const StudentCourseView = ({ courseId, onBack }) => {
                                     padding: '1.5rem',
                                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                                     cursor: 'pointer',
-                                    backgroundColor: expandedModules[module.id] ? 'var(--light)' : 'white'
+                                    backgroundColor: expandedModules[module.id] ? 'rgba(255, 255, 255, 0.03)' : 'transparent',
+                                    transition: 'all 0.3s ease'
                                 }}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <div style={{ padding: '0.5rem', backgroundColor: '#e0e7ff', borderRadius: '0.375rem', color: '#4f46e5' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                                    <div style={{ padding: '0.75rem', backgroundColor: 'rgba(14, 165, 233, 0.1)', borderRadius: '0.75rem', color: 'var(--primary)', border: '1px solid rgba(14, 165, 233, 0.2)' }}>
                                         <BookOpen size={24} />
                                     </div>
                                     <div>
-                                        <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text)' }}>{module.title}</h3>
-                                        <p style={{ color: 'var(--text-light)', fontSize: '0.875rem' }}>{module.description}</p>
-                                        <div style={{ display: 'flex', gap: '1rem', marginTop: '0.25rem', fontSize: '0.75rem', color: 'var(--text-light)' }}>
-                                            <span>📹 {module.videos?.length || 0} videos</span>
-                                            <span>📝 {module.assignments?.length || 0} assignments</span>
-                                            <span>✅ {module.tests?.length || 0} tests</span>
+                                        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)' }}>{module.title}</h3>
+                                        <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.2rem' }}>{module.description}</p>
+                                        <div style={{ display: 'flex', gap: '1.25rem', marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700' }}>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Video size={14} color="var(--primary)" /> {module.videos?.length || 0} Segmented Data</span>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><FileText size={14} color="#D97706" /> {module.assignments?.length || 0} Mission Files</span>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><CheckSquare size={14} color="#16A34A" /> {module.tests?.length || 0} Assessments</span>
                                         </div>
                                     </div>
                                 </div>
-                                {expandedModules[module.id] ? <ChevronDown /> : <ChevronRight />}
+                                <div style={{ color: 'var(--text-muted)' }}>
+                                    {expandedModules[module.id] ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
+                                </div>
                             </div>
 
                             {expandedModules[module.id] && (
@@ -443,10 +446,10 @@ const StudentCourseView = ({ courseId, onBack }) => {
                             </div>
                         </Card>
                     )) : (
-                        <div style={{ textAlign: 'center', padding: '3rem', backgroundColor: 'white', borderRadius: '0.5rem' }}>
-                            <FileText size={48} color="var(--gray)" style={{ marginBottom: '1rem' }} />
-                            <h3>No assignments yet</h3>
-                            <p style={{ color: 'var(--text-light)' }}>Assignments will appear here once added by your instructor.</p>
+                        <div style={{ textAlign: 'center', padding: '5rem 2rem', backgroundColor: 'var(--bg-surface)', borderRadius: '1rem', border: '1px dashed var(--border-color)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <FileText size={64} color="var(--text-muted)" style={{ marginBottom: '1.5rem', opacity: 0.3 }} />
+                            <h3 style={{ color: 'var(--text-main)', fontWeight: '800', fontSize: '1.25rem' }}>No Active Mission Files</h3>
+                            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Assignments will be deployed here by Command.</p>
                         </div>
                     )}
                 </div>
@@ -486,31 +489,31 @@ const StudentCourseView = ({ courseId, onBack }) => {
                     )) : (
                         <div style={{ 
                             textAlign: 'center', 
-                            padding: '4rem 2rem', 
-                            backgroundColor: 'var(--white)', 
+                            padding: '5rem 2rem', 
+                            backgroundColor: 'var(--bg-surface)', 
                             borderRadius: '1rem',
-                            border: '2px dashed var(--border-color)',
+                            border: '1px dashed var(--border-color)',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)'
                         }}>
                             <div style={{
-                                width: '70px',
-                                height: '70px',
+                                width: '80px',
+                                height: '80px',
                                 borderRadius: '50%',
-                                backgroundColor: '#fef3c7',
+                                backgroundColor: 'rgba(217, 119, 6, 0.1)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                marginBottom: '1.25rem'
+                                marginBottom: '1.5rem',
+                                border: '1px solid rgba(217, 119, 6, 0.2)'
                             }}>
-                                <CheckSquare size={36} color="#d97706" />
+                                <CheckSquare size={40} color="#d97706" />
                             </div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text)' }}>No tests yet</h3>
-                            <p style={{ color: 'var(--text-light)', maxWidth: '300px', margin: '0.5rem auto 0' }}>
-                                Tests will appear here once added by your instructor. Check back soon for new assessments.
+                            <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-main)' }}>No Assessments Scheduled</h3>
+                            <p style={{ color: 'var(--text-muted)', maxWidth: '400px', margin: '0.75rem auto 0', lineHeight: '1.6' }}>
+                                Evaluation protocols have not been initialized for this sector yet.
                             </p>
                         </div>
                     )}

@@ -373,7 +373,8 @@ router.get('/test-results', authenticateToken, async (req, res) => {
 
         res.json(results);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Test results fetch error:", error);
+        res.status(500).json({ message: "Failed to fetch test results: " + error.message });
     }
 });
 

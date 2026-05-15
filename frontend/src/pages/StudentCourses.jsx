@@ -186,7 +186,7 @@ const StudentCourses = () => {
                                         <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#1E293B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)' }}>
                                             <BookOpen size={14} color="#94A3B8" />
                                         </div>
-                                        <span style={{ color: '#CBD5E1', fontSize: '0.8rem', fontWeight: '600' }}>{course.modules?.length || 0} Modules</span>
+                                        <span style={{ color: '#CBD5E1', fontSize: '0.8rem', fontWeight: '600' }}>{course.module_count || 0} Modules</span>
                                     </div>
                                     <div style={{ color: '#38BDF8', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                         RESUME <ArrowRight size={14} />

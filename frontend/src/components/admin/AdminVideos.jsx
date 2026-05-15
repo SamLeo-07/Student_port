@@ -243,7 +243,7 @@ const AdminVideos = () => {
                 <select
                     value={filterCourseId}
                     onChange={(e) => { setFilterCourseId(e.target.value); setFilterModuleId(''); }}
-                    style={{ padding: '0.5rem 1rem', borderRadius: '0.375rem', border: '1px solid var(--border-color)', minWidth: '150px' }}
+                    style={{ padding: '0.5rem 1rem', borderRadius: '0.375rem', border: '1px solid var(--border-color)', minWidth: '150px', backgroundColor: 'var(--bg-surface)', color: 'var(--text-main)' }}
                 >
                     <option value="">All Courses</option>
                     {courses.map(course => (
@@ -253,7 +253,7 @@ const AdminVideos = () => {
                 <select
                     value={filterModuleId}
                     onChange={(e) => setFilterModuleId(e.target.value)}
-                    style={{ padding: '0.5rem 1rem', borderRadius: '0.375rem', border: '1px solid var(--border-color)', minWidth: '150px' }}
+                    style={{ padding: '0.5rem 1rem', borderRadius: '0.375rem', border: '1px solid var(--border-color)', minWidth: '150px', backgroundColor: 'var(--bg-surface)', color: 'var(--text-main)' }}
                 // Removed disabled attribute
                 >
                     <option value="">All Modules</option>

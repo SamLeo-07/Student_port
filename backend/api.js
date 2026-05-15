@@ -6,10 +6,10 @@ import serverless from 'serverless-http';
 import { fileURLToPath } from 'url';
 import { db } from './db.js';
 
-dotenv.config();
-
-// Path compatibility for Netlify/ESM/CJS
-const __dirname = path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '../.env') });
+dotenv.config(); // fallback
 
 const app = express();
 const PORT = process.env.PORT || 5002;
@@ -56,7 +56,6 @@ apiRouter.use('/youtube', youtubeRouter);
 
 // Mount on multiple possible path prefixes for Netlify compatibility
 app.use('/api', apiRouter);
-app.use('/', apiRouter);
 app.use('/.netlify/functions/api', apiRouter);
 app.use('/.netlify/functions/api/api', apiRouter);
 
@@ -66,7 +65,7 @@ app.get('/', (req, res) => {
 
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+        console.log(`\x1b[32m➜\x1b[0m  \x1b[1mBackend\x1b[0m:   \x1b[36mhttp://localhost:${PORT}/\x1b[0m`);
     });
 }
 

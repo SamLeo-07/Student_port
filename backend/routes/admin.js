@@ -10,7 +10,7 @@ router.get('/students', authenticateToken, authorizeRole('admin'), async (req, r
     try {
         const result = await db.execute(`
             SELECT 
-                u.id, u.name, u.email, u.role, u.created_at, u.batch_id,
+                u.id, u.name, u.email, u.role, u.created_at, u.batch_id, u.course_id, u.raw_token,
                 s.phone, s.dob, s.address, s.gender, s.guardian_name, s.guardian_contact, s.previous_qualification
             FROM users u
             LEFT JOIN students s ON u.id = s.user_id
@@ -43,8 +43,8 @@ router.post('/students', authenticateToken, authorizeRole('admin'), async (req, 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const userResult = await db.execute({
-            sql: "INSERT INTO users (name, email, password, role, batch_id) VALUES (?, ?, ?, 'student', ?) RETURNING id",
-            args: [name, email, hashedPassword, req.body.batch_id || null]
+            sql: "INSERT INTO users (name, email, password, role, batch_id, course_id, raw_token) VALUES (?, ?, ?, 'student', ?, ?, ?) RETURNING id",
+            args: [name, email, hashedPassword, req.body.batch_id || null, req.body.course_id || null, password]
         });
 
         // Turso/SQLite might not support RETURNING in all drivers or versions easily via execute depending on library.
@@ -82,7 +82,7 @@ router.post('/students', authenticateToken, authorizeRole('admin'), async (req, 
         // 3. Optional: Enroll in Course
         if (req.body.course_id) {
             await db.execute({
-                sql: "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)",
+                sql: "INSERT OR IGNORE INTO enrollments (student_id, course_id) VALUES (?, ?)",
                 args: [userId, req.body.course_id]
             });
         }
@@ -110,7 +110,7 @@ router.post('/enroll', authenticateToken, authorizeRole('admin'), async (req, re
         }
 
         await db.execute({
-            sql: "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)",
+            sql: "INSERT OR IGNORE INTO enrollments (student_id, course_id) VALUES (?, ?)",
             args: [student_id, course_id]
         });
         res.json({ message: "Student Enrolled Successfully" });
@@ -249,13 +249,13 @@ router.put('/students/:id', authenticateToken, authorizeRole('admin'), async (re
         if (password && password !== '*****') {
             const hashedPassword = await bcrypt.hash(password, 10);
             await db.execute({
-                sql: "UPDATE users SET name = ?, email = ?, password = ?, batch_id = ? WHERE id = ?",
-                args: [nameToUpdate, emailToUpdate, hashedPassword, batch_id || null, userId]
+                sql: "UPDATE users SET name = ?, email = ?, password = ?, batch_id = ?, course_id = ?, raw_token = ? WHERE id = ?",
+                args: [nameToUpdate, emailToUpdate, hashedPassword, batch_id || null, req.body.course_id || null, password, userId]
             });
         } else {
             await db.execute({
-                sql: "UPDATE users SET name = ?, email = ?, batch_id = ? WHERE id = ?",
-                args: [nameToUpdate, emailToUpdate, batch_id || null, userId]
+                sql: "UPDATE users SET name = ?, email = ?, batch_id = ?, course_id = ? WHERE id = ?",
+                args: [nameToUpdate, emailToUpdate, batch_id || null, req.body.course_id || null, userId]
             });
         }
 
@@ -286,15 +286,36 @@ router.put('/students/:id', authenticateToken, authorizeRole('admin'), async (re
 
         // 3. Optional: Enroll in Course if provided
         if (req.body.course_id) {
-            const existingEnrollment = await db.execute({
-                sql: "SELECT * FROM enrollments WHERE student_id = ? AND course_id = ?",
-                args: [userId, req.body.course_id]
-            });
-            if (existingEnrollment.rows.length === 0) {
+            // Get previous course_id from user table (we already have it from currentUser fetch above)
+            const oldCourseId = user.course_id;
+            const newCourseId = req.body.course_id;
+
+            if (String(oldCourseId) !== String(newCourseId)) {
+                // Remove old enrollment if it exists
+                if (oldCourseId) {
+                    await db.execute({
+                        sql: "DELETE FROM enrollments WHERE student_id = ? AND course_id = ?",
+                        args: [userId, oldCourseId]
+                    });
+                }
+                
+                // Add new enrollment (Use OR IGNORE to prevent constraint errors if already exists)
                 await db.execute({
-                    sql: "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)",
-                    args: [userId, req.body.course_id]
+                    sql: "INSERT OR IGNORE INTO enrollments (student_id, course_id) VALUES (?, ?)",
+                    args: [userId, newCourseId]
                 });
+            } else {
+                // Ensure enrollment exists if it's the same course (just in case it was deleted manually)
+                const existingEnrollment = await db.execute({
+                    sql: "SELECT * FROM enrollments WHERE student_id = ? AND course_id = ?",
+                    args: [userId, newCourseId]
+                });
+                if (existingEnrollment.rows.length === 0) {
+                    await db.execute({
+                        sql: "INSERT OR IGNORE INTO enrollments (student_id, course_id) VALUES (?, ?)",
+                        args: [userId, newCourseId]
+                    });
+                }
             }
         }
 

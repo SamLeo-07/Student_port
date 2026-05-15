@@ -110,8 +110,15 @@ const AssignmentRunner = ({ assignment, onComplete, onCancel }) => {
             testCases.forEach((tc, index) => {
                 let pass = false, actual = null, error = null;
                 try {
-                    const executionCode = `${code}\n\nif (typeof solution === 'function') solution(${tc.input}); else eval(code);`;
-                    actual = eval(executionCode);
+                    const executionCode = `
+                        ${code}
+                        if (typeof solution === 'function') {
+                            return solution(${tc.input});
+                        }
+                        return null;
+                    `;
+                    const runner = new Function(executionCode);
+                    actual = runner();
                     if (String(actual).trim() === String(tc.output).trim()) pass = true;
                     if (tc.output === 'Success' && code.length > 5) pass = true;
                 } catch (err) { error = err.message; actual = "Error: " + err.message; }

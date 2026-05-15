@@ -143,7 +143,7 @@ const AdminCourses = () => {
         <motion.div initial="hidden" animate="show" variants={container}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
                 <div>
-                    <motion.h2 variants={item} style={{ fontSize: '2rem', fontWeight: '900', color: '#0F172A', marginBottom: '0.25rem' }}>Curriculum Architect</motion.h2>
+                    <motion.h2 variants={item} style={{ fontSize: '2rem', fontWeight: '900', color: '#0F172A', marginBottom: '0.25rem' }}>Course Architect</motion.h2>
                     <motion.p variants={item} style={{ color: '#64748B' }}>Design and distribute elite educational programs.</motion.p>
                 </div>
                 <motion.div variants={item}>
@@ -151,7 +151,7 @@ const AdminCourses = () => {
                         onClick={() => { setEditingCourse(null); setFormData({ title: '', description: '', duration: '', module_ids: [] }); setShowModal(true); }}
                         style={{ borderRadius: '0.75rem', padding: '0.75rem 1.5rem', background: 'var(--primary-gradient)' }}
                     >
-                        <Plus size={20} style={{ marginRight: '0.5rem' }} /> Add Digital Course
+                        <Plus size={20} style={{ marginRight: '0.5rem' }} /> Add New Course
                     </Button>
                 </motion.div>
             </div>
@@ -166,97 +166,93 @@ const AdminCourses = () => {
                     style={{ 
                         display: 'grid', 
                         gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-                        gap: '2.5rem',
-                        perspective: '1200px'
+                        gap: '1.5rem'
                     }}
                 >
                     {courses.map((course, i) => (
                         <motion.div 
                             key={course.id} 
                             variants={item}
-                            whileHover={{ scale: 1.05, rotateX: -5, rotateY: 3, z: 30 }}
+                            whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(14, 165, 233, 0.15)' }}
                             style={{ 
-                                background: 'linear-gradient(145deg, #0f172a, #111827)', 
-                                border: '1px solid rgba(56, 189, 248, 0.2)',
-                                borderRadius: '1.75rem',
+                                background: 'var(--bg-surface)', 
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '1rem',
                                 overflow: 'hidden',
-                                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.6)',
                                 position: 'relative',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                height: '360px',
-                                transformStyle: 'preserve-3d'
+                                height: 'auto',
+                                transition: 'all 0.3s ease'
                             }}
                         >
-                            {/* Holographic Header */}
+                            {/* Card Header */}
                             <div style={{ 
-                                height: '140px', 
-                                background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)', 
+                                height: '120px', 
+                                background: 'var(--bg-dark)', 
                                 position: 'relative',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 overflow: 'hidden',
-                                borderBottom: '1px solid rgba(56, 189, 248, 0.1)'
+                                borderBottom: '1px solid var(--border-color)'
                             }}>
-                                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '3px', background: 'linear-gradient(90deg, #38bdf8, #c084fc)' }} />
-                                <div style={{ position: 'absolute', top: '-20%', right: '-20%', width: '150px', height: '150px', background: 'radial-gradient(circle, rgba(56,189,248,0.15) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+                                <div style={{ position: 'absolute', top: 0, right: 0, width: '100px', height: '100px', background: 'radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
                                 
-                                <div style={{ zIndex: 1, color: '#38bdf8', filter: 'drop-shadow(0 0 10px rgba(56, 189, 248, 0.5))', transform: 'translateZ(50px)' }}>
-                                    <BookOpen size={56} />
+                                <div style={{ color: 'var(--primary)', opacity: 0.8 }}>
+                                    <BookOpen size={40} />
                                 </div>
                                 
                                 <div style={{ 
                                     position: 'absolute', 
-                                    top: '1.25rem', 
-                                    right: '1.25rem', 
+                                    top: '1rem', 
+                                    right: '1rem', 
                                     display: 'flex', 
-                                    gap: '0.6rem',
-                                    zIndex: 2,
-                                    transform: 'translateZ(30px)'
+                                    gap: '0.5rem',
+                                    zIndex: 2
                                 }}>
                                     <button 
                                         onClick={() => handleEdit(course)}
-                                        style={{ border: 'none', background: 'rgba(255,255,255,0.05)', height: '32px', width: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#94a3b8' }}
+                                        style={{ border: '1px solid var(--border-color)', background: 'var(--bg-surface)', height: '32px', width: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-main)' }}
                                     >
-                                        <Edit2 size={16} />
+                                        <Edit2 size={14} />
                                     </button>
                                     <button 
                                         onClick={() => handleDelete(course.id)}
-                                        style={{ border: 'none', background: 'rgba(239, 68, 68, 0.1)', height: '32px', width: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ef4444' }}
+                                        style={{ border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)', height: '32px', width: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ef4444' }}
                                     >
-                                        <Trash2 size={16} />
+                                        <Trash2 size={14} />
                                     </button>
                                 </div>
                             </div>
                             
-                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column', transform: 'translateZ(20px)' }}>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '900', color: '#f8fafc', marginBottom: '0.75rem', lineHeight: '1.3', letterSpacing: '-0.02em' }}>
+                            <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem', lineHeight: '1.3' }}>
                                     {course.title}
                                 </h3>
-                                <p style={{ fontSize: '0.875rem', color: '#94a3b8', marginBottom: '1.5rem', flex: 1, lineHeight: '1.6', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', fontWeight: '500' }}>
-                                    {course.description || 'Deep architectural systems for digital personnel enhancement.'}
+                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem', flex: 1, lineHeight: '1.6', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                                    {course.description || 'Access course materials and interactive modules.'}
                                 </p>
                                 
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '1.25rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', fontWeight: '900', color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                        <Clock size={16} /> {course.duration || 'Flexible'}
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', fontWeight: '600', color: 'var(--text-muted)' }}>
+                                        <Clock size={14} /> {course.duration || 'Flexible'}
                                     </div>
-                                    <Button 
-                                        variant="outline" 
-                                        style={{ borderRadius: '10px', fontSize: '0.7rem', fontWeight: '900', padding: '0.4rem 1rem', borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
+                                    <button 
+                                        style={{ background: 'none', border: 'none', fontSize: '0.8rem', fontWeight: '700', color: 'var(--primary)', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.05em' }}
                                         onClick={() => handleOpenModules(course)}
                                     >
-                                        STRUCTURE
-                                    </Button>
+                                        Manage
+                                    </button>
                                 </div>
                             </div>
                         </motion.div>
                     ))}
                     {courses.length === 0 && (
-                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '6rem', background: 'rgba(0,0,0,0.2)', borderRadius: '2rem', border: '2px dashed rgba(255,255,255,0.05)' }}>
-                            <BookOpen size={48} style={{ opacity: 0.1, marginBottom: '1.5rem' }} />
-                            <p style={{ color: '#475569', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: '900' }}>No curriculum architecture detected.</p>
+                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem 2rem', background: 'var(--bg-surface)', borderRadius: '1rem', border: '1px dashed var(--border-color)' }}>
+                            <BookOpen size={48} style={{ opacity: 0.5, margin: '0 auto 1.5rem auto', color: 'var(--text-muted)' }} />
+                            <p style={{ color: 'var(--text-main)', fontWeight: '600', fontSize: '1.1rem' }}>No courses available.</p>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Create your first course to get started.</p>
                         </div>
                     )}
                 </motion.div>

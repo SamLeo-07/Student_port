@@ -71,10 +71,7 @@ router.get('/class/:classId', authenticateToken, authorizeRole('admin'), async (
                 FROM users u
                 LEFT JOIN batches b ON u.batch_id = b.id
                 LEFT JOIN attendance a ON a.student_id = u.id AND a.class_id = ?
-                WHERE u.role = 'student' AND (
-                    u.id IN (SELECT student_id FROM enrollments WHERE course_id = ?)
-                    OR u.batch_id IN (SELECT batch_id FROM batch_courses WHERE course_id = ?)
-                )
+                WHERE u.role = 'student' AND (u.course_id = ? OR u.id IN (SELECT student_id FROM enrollments WHERE course_id = ?))
                 ORDER BY u.name ASC
             `,
             args: [classId, courseId, courseId]
@@ -96,17 +93,20 @@ router.get('/class/:classId', authenticateToken, authorizeRole('admin'), async (
 router.post('/mark', authenticateToken, authorizeRole('admin'), async (req, res) => {
     const { class_id, student_id, status } = req.body;
 
-    if (!['Present', 'Absent', 'Pending'].includes(status)) {
+    if (!['Present', 'Absent', 'Late', 'Pending'].includes(status)) {
         return res.status(400).json({ message: "Invalid status" });
     }
 
     try {
+        const classInt = parseInt(class_id);
+        const studentInt = parseInt(student_id);
+
         await db.execute({
             sql: `INSERT INTO attendance (class_id, student_id, status) 
                   VALUES (?, ?, ?) 
                   ON CONFLICT(class_id, student_id) 
                   DO UPDATE SET status = EXCLUDED.status, updated_at = CURRENT_TIMESTAMP`,
-            args: [class_id, student_id, status]
+            args: [classInt, studentInt, status]
         });
         res.json({ message: "Attendance marked successfully" });
     } catch (error) {
@@ -123,6 +123,8 @@ router.post('/mark-bulk', authenticateToken, authorizeRole('admin'), async (req,
 
     try {
         for (const update of updates) {
+            if (!['Present', 'Absent', 'Late', 'Pending'].includes(update.status)) continue;
+
             await db.execute({
                 sql: `INSERT INTO attendance (class_id, student_id, status) 
                       VALUES (?, ?, ?) 
@@ -141,18 +143,17 @@ router.post('/mark-bulk', authenticateToken, authorizeRole('admin'), async (req,
 // Get Summary for Admin (Segregated by courses and batches)
 router.get('/summary', authenticateToken, authorizeRole('admin'), async (req, res) => {
     try {
-        const { batch_id, course_id } = req.query;
+        const { batch_id, course_id, student_id, date, class_id } = req.query;
 
         let sql = `
-            SELECT 
+            SELECT DISTINCT
                 u.id as student_id, u.name as student_name, 
-                b.batch_name, c.title as course_title, 
+                b.batch_name, c.title as course_title, c.id as course_id,
                 cls.id as class_id, cls.title as class_title, cls.topic, cls.instructor_name, cls.schedule,
-                a.status, a.updated_at
+                a.status, a.updated_at, a.id as attendance_record_id
             FROM users u
-            JOIN batches b ON u.batch_id = b.id
-            JOIN batch_courses bc ON b.id = bc.batch_id
-            JOIN courses c ON bc.course_id = c.id
+            LEFT JOIN batches b ON u.batch_id = b.id
+            JOIN courses c ON u.course_id = c.id
             JOIN classes cls ON c.id = cls.course_id
             LEFT JOIN attendance a ON a.student_id = u.id AND a.class_id = cls.id
             WHERE u.role = 'student'
@@ -167,8 +168,20 @@ router.get('/summary', authenticateToken, authorizeRole('admin'), async (req, re
             sql += " AND c.id = ?";
             args.push(course_id);
         }
+        if (student_id) {
+            sql += " AND u.id = ?";
+            args.push(student_id);
+        }
+        if (class_id) {
+            sql += " AND cls.id = ?";
+            args.push(class_id);
+        }
+        if (date) {
+            sql += " AND DATE(cls.schedule) = DATE(?)";
+            args.push(date);
+        }
 
-        sql += " ORDER BY b.batch_name, c.title, u.name, cls.schedule DESC";
+        sql += " ORDER BY cls.schedule DESC, u.name ASC";
 
         const result = await db.execute({ sql, args });
         
@@ -180,6 +193,78 @@ router.get('/summary', authenticateToken, authorizeRole('admin'), async (req, re
         res.json(records);
     } catch (error) {
         console.error("Error fetching attendance summary:", error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Delete Attendance Record
+router.delete('/:id', authenticateToken, authorizeRole('admin'), async (req, res) => {
+    try {
+        await db.execute({
+            sql: "DELETE FROM attendance WHERE id = ?",
+            args: [req.params.id]
+        });
+        res.json({ message: "Attendance record deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting attendance:", error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Find or Create Class Session for Attendance
+router.post('/get-session', authenticateToken, authorizeRole('admin'), async (req, res) => {
+    const { course_id, module_id, date } = req.body;
+
+    if (!course_id || !date) {
+        return res.status(400).json({ message: "Course and Date are required" });
+    }
+
+    try {
+        // 1. Check if a class already exists for this course and date (and module if provided)
+        let sql = `SELECT id FROM classes WHERE course_id = ? AND DATE(schedule) = DATE(?)`;
+        let args = [course_id, date];
+        
+        if (module_id) {
+            sql += " AND module_id = ?";
+            args.push(module_id);
+        }
+        
+        sql += " LIMIT 1";
+
+        const existingRes = await db.execute({ sql, args });
+
+        if (existingRes.rows.length > 0) {
+            return res.json({ class_id: existingRes.rows[0].id });
+        }
+
+        // 2. If not, create a new one
+        let title = "Daily Attendance";
+        if (module_id) {
+            const modRes = await db.execute({
+                sql: "SELECT title FROM modules WHERE id = ?",
+                args: [module_id]
+            });
+            if (modRes.rows[0]) title = modRes.rows[0].title;
+        } else {
+            // Get course title
+            const courseRes = await db.execute({
+                sql: "SELECT title FROM courses WHERE id = ?",
+                args: [course_id]
+            });
+            if (courseRes.rows[0]) title = `${courseRes.rows[0].title} Attendance`;
+        }
+        
+        const newClassTitle = `${title} - ${date}`;
+
+        const insertRes = await db.execute({
+            sql: `INSERT INTO classes (course_id, module_id, title, schedule, instructor_name) 
+                  VALUES (?, ?, ?, ?, ?)`,
+            args: [course_id, module_id || null, newClassTitle, date, req.user.name || 'Admin']
+        });
+
+        res.status(201).json({ class_id: Number(insertRes.lastInsertRowid) });
+    } catch (error) {
+        console.error("Error in get-session:", error);
         res.status(500).json({ message: error.message });
     }
 });

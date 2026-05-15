@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Uses relative path — Vite proxy handles /api/* → localhost:5002 in dev.
 // In production (Netlify/etc), configure VITE_API_URL or a redirect rule.
-const API_URL = import.meta.env.VITE_API_URL || '/api/';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const api = axios.create({
     baseURL: API_URL,

@@ -4,49 +4,58 @@ import { motion } from 'framer-motion';
 const Card = ({ 
     children, 
     className = '', 
-    glass = false, 
+    glass = true, 
     hover = true,
-    padding = '1.5rem',
+    padding = '1.75rem',
     ...props 
 }) => {
-    const isDark = className.includes('dark');
-    
     return (
         <motion.div
             whileHover={hover ? { 
-                y: -8, 
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
+                y: -6, 
                 borderColor: 'var(--primary)',
-                transition: { type: 'spring', stiffness: 300, damping: 20 }
+                boxShadow: '0 20px 40px -15px rgba(14, 165, 233, 0.25)',
+                transition: { type: 'spring', stiffness: 400, damping: 25 }
             } : {}}
             style={{
-                backgroundColor: glass ? 'rgba(255, 255, 255, 0.8)' : 'var(--white)',
-                backdropFilter: glass ? 'blur(12px)' : 'none',
-                WebkitBackdropFilter: glass ? 'blur(12px)' : 'none',
-                borderRadius: '1.5rem',
+                backgroundColor: glass ? 'rgba(10, 10, 10, 0.7)' : 'var(--bg-surface)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                borderRadius: '1.75rem',
                 border: '1px solid var(--border-color)',
                 padding: padding,
                 position: 'relative',
                 overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
                 ...props.style
             }}
-            className={`${className} ${glass ? (isDark ? 'glass-dark' : 'glass') : ''}`}
+            className={className}
             {...props}
         >
-            {/* Subtle light effect top-right for premium feel */}
-            {glass && (
-                <div style={{
-                    position: 'absolute',
-                    top: '-50%',
-                    right: '-50%',
-                    width: '100%',
-                    height: '100%',
-                    background: 'radial-gradient(circle, rgba(239, 246, 255, 0.5) 0%, transparent 70%)',
-                    pointerEvents: 'none',
-                    zIndex: 0
-                }} />
-            )}
-            <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>
+            {/* Glossy light effect */}
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                zIndex: 2
+            }} />
+
+            {/* Corner Accent */}
+            <div style={{
+                position: 'absolute',
+                top: -10,
+                right: -10,
+                width: '40px',
+                height: '40px',
+                background: 'radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%)',
+                zIndex: 0
+            }} />
+
+            <div style={{ position: 'relative', zIndex: 1, height: '100%', width: '100%' }}>
                 {children}
             </div>
         </motion.div>

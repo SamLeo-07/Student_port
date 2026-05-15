@@ -83,7 +83,7 @@ const StudentClasses = () => {
             {classes.length === 0 ? (
                 <div style={{
                     textAlign: 'center', padding: '4rem 2rem',
-                    backgroundColor: 'white', borderRadius: '1rem',
+                    backgroundColor: 'var(--bg-surface)', borderRadius: '1rem',
                     border: '1px solid var(--border-color)'
                 }}>
                     <div style={{
@@ -172,7 +172,7 @@ const StudentClasses = () => {
                                             )}
                                         </div>
                                     )}
-                                    <div style={{ padding: '1.25rem', backgroundColor: 'white' }}>
+                                    <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface)' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                             <div>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
@@ -240,16 +240,16 @@ const StudentClasses = () => {
                                         {/* Private Video Access Instructions */}
                                         <div style={{
                                             marginTop: '1.5rem', padding: '1rem',
-                                            backgroundColor: '#F0F9FF', borderRadius: '0.75rem',
-                                            border: '1px solid #BAE6FD', display: 'flex', gap: '1rem',
+                                            backgroundColor: 'rgba(14, 165, 233, 0.1)', borderRadius: '0.75rem',
+                                            border: '1px solid var(--border-color)', display: 'flex', gap: '1rem',
                                             alignItems: 'flex-start'
                                         }}>
                                             <div style={{ fontSize: '1.2rem' }}>⚠️</div>
                                             <div>
-                                                <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0369A1', marginBottom: '0.25rem' }}>
+                                                <p style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '0.25rem' }}>
                                                     Policy & Access Help
                                                 </p>
-                                                <p style={{ fontSize: '0.8rem', color: '#075985', lineHeight: '1.5' }}>
+                                                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                                                     If the video says "<b>Playback disabled by owner</b>", YouTube is blocking the "in-page" view. Use the <b>Launch Floating Player</b> button above to bypass this.
                                                     <br/><br/>
                                                     If it says "<b>Private</b>", ensure you are logged in to the correct YouTube account:
@@ -287,7 +287,7 @@ const StudentClasses = () => {
                                                 style={{
                                                     display: 'flex', gap: '0.75rem', padding: '0.75rem 1rem',
                                                     cursor: 'pointer', alignItems: 'flex-start',
-                                                    backgroundColor: activeVideo?.unique_id === cls.unique_id ? 'var(--primary-light)' : 'transparent',
+                                                    backgroundColor: activeVideo?.unique_id === cls.unique_id ? 'rgba(14, 165, 233, 0.1)' : 'transparent',
                                                     borderLeft: activeVideo?.unique_id === cls.unique_id ? '3px solid var(--primary)' : '3px solid transparent',
                                                     transition: 'all 0.15s'
                                                 }}
@@ -298,10 +298,10 @@ const StudentClasses = () => {
                                                             style={{ width: '72px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
                                                     ) : (
                                                         <div style={{
-                                                            width: '72px', height: '48px', backgroundColor: '#e0e7ff',
+                                                            width: '72px', height: '48px', backgroundColor: 'rgba(14, 165, 233, 0.1)',
                                                             borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center'
                                                         }}>
-                                                            <PlayCircle size={20} color="#4F46E5" />
+                                                            <PlayCircle size={20} color="var(--primary)" />
                                                         </div>
                                                     )}
                                                     {activeVideo?.unique_id === cls.unique_id && (
@@ -350,8 +350,8 @@ const StudentClasses = () => {
                                 style={{
                                     width: '100%', paddingLeft: '2.5rem', padding: '0.625rem 0.75rem 0.625rem 2.5rem',
                                     border: '1px solid var(--border-color)', borderRadius: '0.5rem',
-                                    fontSize: '0.875rem', outline: 'none', backgroundColor: 'white',
-                                    color: 'var(--text)', boxSizing: 'border-box'
+                                    fontSize: '0.875rem', outline: 'none', backgroundColor: 'var(--bg-surface)',
+                                    color: 'var(--text-main)', boxSizing: 'border-box'
                                 }}
                             />
                         </div>
@@ -363,7 +363,7 @@ const StudentClasses = () => {
                                 style={{
                                     paddingLeft: '2.5rem', padding: '0.625rem 2rem 0.625rem 2.5rem',
                                     border: '1px solid var(--border-color)', borderRadius: '0.5rem',
-                                    fontSize: '0.875rem', backgroundColor: 'white', color: 'var(--text)',
+                                    fontSize: '0.875rem', backgroundColor: 'var(--bg-surface)', color: 'var(--text-main)',
                                     cursor: 'pointer', outline: 'none', appearance: 'none'
                                 }}
                             >
@@ -401,8 +401,8 @@ const StudentClasses = () => {
                                         <img src={getYoutubeThumbnail(cls.video_url)} alt={cls.title}
                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
-                                        <div style={{ width: '100%', height: '100%', backgroundColor: '#e0e7ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <PlayCircle size={36} color="#4F46E5" />
+                                        <div style={{ width: '100%', height: '100%', backgroundColor: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <PlayCircle size={36} color="var(--primary)" />
                                         </div>
                                     )}
                                     {activeVideo?.unique_id === cls.unique_id && (
@@ -423,8 +423,8 @@ const StudentClasses = () => {
                                     <div style={{ marginBottom: '0.5rem' }}>
                                         <span style={{
                                             fontSize: '0.7rem', fontWeight: '600', textTransform: 'uppercase',
-                                            color: 'var(--primary)', backgroundColor: 'var(--primary-light)',
-                                            padding: '0.15rem 0.5rem', borderRadius: '9999px'
+                                            color: 'var(--primary)', backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                                            padding: '0.15rem 0.5rem', borderRadius: '9999px', border: '1px solid var(--border-color)'
                                         }}>
                                             {cls.course_title}
                                         </span>

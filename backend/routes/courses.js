@@ -26,22 +26,28 @@ router.get('/', authenticateToken, async (req, res) => {
         let args = [];
 
         if (req.user.role === 'student' || req.user.email === 'student@gmail.com') {
-            // First check if student has any direct enrollments
-            const enrollCheck = await db.execute({
-                sql: "SELECT COUNT(*) as count FROM enrollments WHERE student_id = ?",
-                args: [req.user.id]
-            });
-            const hasDirectEnrollments = Number(enrollCheck.rows[0].count) > 0;
-
-            if (hasDirectEnrollments) {
-                // ONLY show directly enrolled courses
-                sql = `SELECT c.* FROM courses c WHERE c.id IN (SELECT course_id FROM enrollments WHERE student_id = ?)`;
-                args = [req.user.id];
-            } else {
-                // Fall back to batch courses ONLY if no direct enrollments
-                sql = `SELECT c.* FROM courses c WHERE c.id IN (SELECT course_id FROM batch_courses WHERE batch_id = (SELECT batch_id FROM users WHERE id = ?))`;
-                args = [req.user.id];
-            }
+            // Merged logic: Get all courses assigned via direct enrollment, batch, or primary user field
+            sql = `
+                SELECT c.*, (
+                    SELECT COUNT(*) FROM course_modules cm2 WHERE cm2.course_id = c.id
+                ) as module_count 
+                FROM courses c 
+                WHERE c.id IN (
+                    SELECT course_id FROM enrollments WHERE student_id = ?
+                    UNION
+                    SELECT course_id FROM batch_courses WHERE batch_id = (SELECT batch_id FROM users WHERE id = ?)
+                    UNION
+                    SELECT course_id FROM users WHERE id = ? AND course_id IS NOT NULL
+                )
+            `;
+            args = [req.user.id, req.user.id, req.user.id];
+        } else {
+            // Admin: All courses with unified module count
+            sql = `
+                SELECT c.*, (
+                    SELECT COUNT(*) FROM course_modules cm2 WHERE cm2.course_id = c.id
+                ) as module_count FROM courses c
+            `;
         }
 
         const result = await db.execute({ sql, args });
@@ -192,23 +198,32 @@ router.get('/:id/tests', authenticateToken, async (req, res) => {
 // Module Routes
 // -------------------------------------------------------------------------
 
-// Admin: Add Module to Course
+// Admin: Create Module and Link to Course
 router.post('/:id/modules', authenticateToken, authorizeRole('admin'), async (req, res) => {
     const { title, description } = req.body;
     const courseId = req.params.id;
 
     try {
-        await db.execute({
-            sql: "INSERT INTO modules (course_id, title, description) VALUES (?, ?, ?)",
-            args: [courseId, title, description]
+        // 1. Create global module
+        const result = await db.execute({
+            sql: "INSERT INTO modules (title, description) VALUES (?, ?) RETURNING id",
+            args: [title, description]
         });
-        res.status(201).json({ message: "Module Added Successfully" });
+        const moduleId = result.rows[0].id;
+
+        // 2. Link to this course
+        await db.execute({
+            sql: "INSERT INTO course_modules (course_id, module_id) VALUES (?, ?)",
+            args: [courseId, moduleId]
+        });
+
+        res.status(201).json({ message: "Module Created and Linked Successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
-// Get Course Modules (Linked)
+// Get Course Modules (Linked via Junction Table)
 router.get('/:id/modules', authenticateToken, async (req, res) => {
     try {
         const result = await db.execute({
@@ -216,6 +231,7 @@ router.get('/:id/modules', authenticateToken, async (req, res) => {
                 SELECT m.* FROM modules m
                 JOIN course_modules cm ON m.id = cm.module_id
                 WHERE cm.course_id = ?
+                ORDER BY m.id ASC
             `,
             args: [req.params.id]
         });
@@ -416,12 +432,13 @@ router.get('/:id/details', authenticateToken, async (req, res) => {
             ...videosRes.rows.map(r => ({ ...r, unique_id: `video_${r.id}`, type: 'video', video_url: r.youtube_url, schedule: r.created_at }))
         ].sort((a, b) => new Date(b.schedule) - new Date(a.schedule));
 
-        // 4. Fetch Modules
+        // 4. Fetch Modules (Linked via junction table)
         const modulesRes = await db.execute({
             sql: `
                 SELECT m.* FROM modules m
                 JOIN course_modules cm ON m.id = cm.module_id
                 WHERE cm.course_id = ?
+                ORDER BY m.id ASC
             `,
             args: [courseId]
         });
