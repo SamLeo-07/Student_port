@@ -57,7 +57,16 @@ apiRouter.use('/youtube', youtubeRouter);
 // Mount on multiple possible path prefixes for Netlify compatibility
 app.use('/api', apiRouter);
 app.use('/.netlify/functions/api', apiRouter);
-app.use('/.netlify/functions/api/api', apiRouter);
+
+// Health check route
+app.get('/api/health', async (req, res) => {
+    try {
+        await db.execute("SELECT 1");
+        res.json({ status: 'ok', database: 'connected' });
+    } catch (e) {
+        res.status(500).json({ status: 'error', database: e.message });
+    }
+});
 
 app.get('/', (req, res) => {
     res.json({ message: 'Student Portal API is running' });
