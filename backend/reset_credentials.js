@@ -1,5 +1,5 @@
 
-import { createClient } from "@libsql/client";
+import { createClient } from "@libsql/client/web";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 
